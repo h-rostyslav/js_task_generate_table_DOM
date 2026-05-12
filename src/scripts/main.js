@@ -356,25 +356,34 @@
 
 const table = document.querySelector('.dashboard');
 
-fetch('./lib/people.json')
-  .then((response) => response.json())
-  .then((people) => {
-    people.forEach((person) => {
-      const row = document.createElement('tr');
+function render(data) {
+  if (!table || !data) return;
 
-      const age = person.died - person.born;
-      const century = Math.ceil(person.died / 100);
-      const gender = person.sex === 'm' ? 'Male' : 'Female';
+  table.innerHTML = '';
 
-      row.innerHTML = `
-    <td>${person.name}</td>
-    <td>${gender}</td>
-    <td>${person.born}</td>
-    <td>${person.died}</td>
-    <td>${age}</td>
-    <td>${century}</td>
-  `;
+  data.forEach((person) => {
+    const row = document.createElement('tr');
+    const age = person.died - person.born;
+    const century = Math.ceil(person.died / 100);
+    const gender = person.sex === 'm' ? 'Male' : 'Female';
 
-      table.append(row);
-    });
+    row.innerHTML = `
+      <td>${person.name}</td>
+      <td>${gender}</td>
+      <td>${person.born}</td>
+      <td>${person.died}</td>
+      <td>${age}</td>
+      <td>${century}</td>
+    `;
+    table.append(row);
   });
+}
+
+if (window.people) {
+  render(window.people);
+} else {
+  fetch('./lib/people.json')
+    .then(res => res.json())
+    .then(render)
+    .catch(() => console.log('Waiting for data...'));
+}
