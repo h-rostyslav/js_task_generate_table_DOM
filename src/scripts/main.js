@@ -1,5 +1,4 @@
 'use strict';
-import people from './people.json';
 
 // const people = [
 //   {
@@ -357,14 +356,17 @@ import people from './people.json';
 
 const table = document.querySelector('.dashboard');
 
-people.forEach((person) => {
-  const row = document.createElement('tr');
+fetch('./people.json')
+  .then((response) => response.json())
+  .then((people) => {
+    people.forEach((person) => {
+      const row = document.createElement('tr');
 
-  const age = person.died - person.born;
-  const century = Math.ceil(person.died / 100);
-  const gender = person.sex === 'm' ? 'Male' : 'Female';
+      const age = person.died - person.born;
+      const century = Math.ceil(person.died / 100);
+      const gender = person.sex === 'm' ? 'Male' : 'Female';
 
-  row.innerHTML = `
+      row.innerHTML = `
     <td>${person.name}</td>
     <td>${gender}</td>
     <td>${person.born}</td>
@@ -373,5 +375,7 @@ people.forEach((person) => {
     <td>${century}</td>
   `;
 
-  table.append(row);
-});
+      table.append(row);
+    });
+  })
+  
