@@ -356,7 +356,7 @@
 
 const table = document.querySelector('.dashboard');
 
-fetch('./people.json')
+fetch('./lib/people.json')
   .then((response) => response.json())
   .then((people) => {
     people.forEach((person) => {
@@ -377,5 +377,4 @@ fetch('./people.json')
 
       table.append(row);
     });
-  })
-  
+  });
